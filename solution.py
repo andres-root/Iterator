@@ -1,3 +1,4 @@
+# import logging
 
 
 def exclusive(f):
@@ -17,10 +18,16 @@ class Iterator():
         self.subindex = 0
         
         # Init next node
-        self.hasNext()
+        self.has_next()
 
-    def hasNext(self):
+    def has_next(self):
+        """
+        Returns true or false if there is another element in the set.
+        """
         try:
+            if self.current_index >= len(self.array_list):
+                raise Exception('Sorry. No more items on list to show.')
+
             while self.current_index < len(self.array_list):
                 if self.subindex < len(self.current_node):
                     return True
@@ -36,9 +43,15 @@ class Iterator():
             print(e)
 
     def next(self):
+        """
+        Returns the value of the next element in the array.
+        """
         try:
+            if self.current_index >= len(self.array_list):
+                raise Exception('Sorry. No more items on list to show.')
+
             if self.subindex >= len(self.current_node):
-                self.subindex = 0
+                self.has_next()
 
             n = self.current_node[self.subindex]
             self.subindex += 1
@@ -48,64 +61,86 @@ class Iterator():
             print(e)
 
     def remove(self):
+        """
+        Removes the last element returned by the iterator.
+        """
         try:
             if len(self.current_node) > 0:
                 del self.current_node[self.subindex - 1]
+            
+            self.subindex -= 1
             
             return self.current_node
         except Exception as e:
             print(e)
 
 
-def testCase1(arrayList):
-    it = Iterator(arrayList)
-    while (it.hasNext()):
-        print(it.next())
-        continue
-
-def testCase2(arrayList):
-    it = Iterator(arrayList)
-    while (it.hasNext()):
-        it.hasNext()
+def test_case_1(array_list):
+    """
+    Test print all elements
+    """
+    it = Iterator(array_list)
+    while (it.has_next()):
         print(it.next())
 
-def testCase3(arrayList):
-    it = Iterator(arrayList)
+def test_case_2(array_list):
+    """
+    Test print all elements once
+    """
+    it = Iterator(array_list)
+    while (it.has_next()):
+        it.has_next()
+        print(it.next())
+
+def test_case_3(array_list):
+    """
+    Test print next element
+    """
+    it = Iterator(array_list)
     for i in range(20):
         print(it.next())
 
-def testCase4(arrayList):
-    it = Iterator(arrayList)
-    while (it.hasNext()):
+def test_case_4(array_list):
+    """
+    Test remove multiples of 3
+    """
+    it = Iterator(array_list)
+    while (it.has_next()):
         x = it.next()
-        if (x % 4 == 0):
+        if (x % 3 == 0):
             it.remove()
-    print(arrayList)
+    print(array_list)
+    assert array_list == [[], [1, 2], [4, 5], [], [], [], [7, 8], [], [], [10], []]
 
-def testCase5(arrayList):
-    '''Remove everything from the list'''
-    it = Iterator(arrayList)
-    while it.hasNext():
+def test_case_5(array_list):
+    """
+    Test remove everything from the list
+    """
+    it = Iterator(array_list)
+    while it.has_next():
         it.next()
         it.remove()
-    print(arrayList)
+    print(array_list)
+    assert array_list == [[], [], [], [], [], [], [], [], [], [], []]
 
-arrayList = [[], [1, 2, 3], [4, 5], [], [], [6], [7, 8], [], [9], [10], []]
+
 if __name__ == '__main__':
+    array_list = [[], [1, 2, 3], [4, 5], [], [], [6], [7, 8], [], [9], [10], []]
+    
     # Scenario 1
     print('Test case 1:')
-    testCase1(arrayList)
+    test_case_1(array_list)
     print('===================================')
     print('Test case 2:')
-    testCase2(arrayList)
+    test_case_2(array_list)
     print('===================================')
     print('Test case 3:')
-    testCase3(arrayList)
+    test_case_3(array_list)
     print('===================================')
 
     # # Scenario 2
     print('Test case 4:')
-    testCase4(arrayList)
+    test_case_4(array_list)
     print('===================================')
     print('Test case 5:')
-    testCase5(arrayList)
+    test_case_5(array_list)
