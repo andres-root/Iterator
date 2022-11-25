@@ -1,15 +1,6 @@
 # import logging
 
 
-def exclusive(f):
-    def wrapper(*args, **kwargs):
-        if not wrapper.has_run:
-            wrapper.has_run = True
-            return f(*args, **kwargs)
-    wrapper.has_run = False
-    return wrapper
-
-
 class Iterator():
     def __init__(self, array_list=[[]]):
         self.array_list = array_list
